@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8"><title>美食店家推薦小工具</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root{--primary-yellow:#FFC727;--dark-text:#1D1D1D;--secondary-text:#8A8A8E;--bg-color:#F7F7F7;--input-bg:#F2F2F2;--white:#ffffff;--shadow:0 8px 24px rgba(0,0,0,0.05);}
+        body{font-family:'Nunito',sans-serif;max-width:700px;margin:0 auto;padding:20px;background-color:var(--bg-color);color:var(--dark-text);}
+        
+        /* --- 浣熊 Hero 區塊樣式 --- */
+        .hero-section {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 20px;
+        }
+        .hero-title {
+            font-size: 3.5em;
+            color: var(--dark-text);
+            font-weight: 800;
+            margin: 0 0 20px 0;
+        }
+        .hero-images {
+            position: relative;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .raccoon-img {
+            width: 150px;
+            position: relative;
+            z-index: 2;
+        }
+        .food-icon {
+            position: absolute;
+            z-index: 1;
+            animation: float 4s ease-in-out infinite;
+        }
+        .icon-sandwich { top: 50%; left: -85%; width: 65px; animation-delay: 0.5s; }
+        .icon-fish { top: -20%; left: -35%; width: 50px; transform: rotate(-20deg); }
+        .icon-apple { top: -25%; right: -40%; width: 45px; animation-delay: 1s; }
+        .icon-banana { top: 60%; right: -70%; width: 60px; transform: rotate(20deg); animation-delay: 0.8s; }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* 以下為卡片和其他元素的樣式 */
+        .card{background-color:var(--white);border-radius:20px;padding:25px 30px;margin-bottom:25px;box-shadow:var(--shadow);border:none;transition:transform 0.2s ease-in-out;z-index:2;position:relative;}.card:hover{transform:translateY(-5px);}h2{text-align:left;color:var(--dark-text);font-weight:800;margin-top:0;margin-bottom:25px;border-bottom:none;padding-bottom:0;font-size:1.5em;}form{display:flex;flex-direction:column;gap:15px;}
+        .custom-select-wrapper{position:relative;width:100%;font-size:1em;}.custom-select-trigger,input[type="text"]{width:100%;padding:16px 20px;border-radius:12px;border:none;background-color:var(--input-bg);font-size:1em;font-family:'Nunito',sans-serif;transition:box-shadow .2s;box-sizing:border-box;}.custom-select-trigger{padding-right:45px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;}
+        .custom-select-wrapper.open .custom-select-trigger,input[type="text"]:focus{outline:none;box-shadow:0 0 0 3px var(--primary-yellow);}.custom-select-trigger .arrow{width:20px;height:20px;background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238A8A8E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");background-repeat:no-repeat;background-position:center;transition:transform .2s;position:absolute;right:15px;top:50%;transform:translateY(-50%);}.custom-select-wrapper.open .custom-select-trigger .arrow{transform:translateY(-50%) rotate(180deg);}.custom-select-panel{position:absolute;top:calc(100% + 5px);left:0;right:0;background-color:var(--white);border-radius:12px;box-shadow:var(--shadow);max-height:200px;overflow-y:auto;z-index:10;opacity:0;visibility:hidden;transform:translateY(-10px);transition:opacity .2s,transform .2s,visibility .2s;padding:5px;}.custom-select-wrapper.open .custom-select-panel{opacity:1;visibility:visible;transform:translateY(0);}.custom-select-option{padding:12px 15px;cursor:pointer;transition:background-color .2s;border-radius:8px;}.custom-select-option:hover,.custom-select-option.selected{background-color:var(--input-bg);}
+        .button{cursor:pointer;padding:16px;border-radius:50px;border:none;font-size:1em;font-weight:700;font-family:'Nunito',sans-serif;transition:background-color .2s,transform .2s;width:100%;box-sizing:border-box;text-align:center;text-decoration:none;box-shadow:0 4px 12px rgba(255,199,39,.4);}.button:hover{transform:scale(1.03);}.button-primary{background-color:var(--primary-yellow);color:var(--dark-text);}.button-primary:hover{background-color:#f0b90c;}.button-secondary{background-color:var(--input-bg);color:var(--dark-text);box-shadow:none;}.button-secondary:hover{background-color:#e0e0e0;}.form-row,.form-actions-row{display:grid;grid-template-columns:1fr 1fr;gap:15px;}
+        .message{text-align:center;color:var(--dark-text);font-weight:700;padding:10px;background-color:#FFF9E6;border-radius:8px;}.results h2{border-color:#ffe8e8;}.recommendation-result p{text-align:center;font-size:2em;color:var(--dark-text);font-weight:800;margin:0;}.recommendation-result small{display:block;text-align:center;color:var(--secondary-text);margin-top:5px;}
+        .restaurant-list{list-style-type:none;padding:0;}.restaurant-list li{display:flex;justify-content:space-between;align-items:center;padding:15px 5px;border-bottom:1px solid var(--input-bg);}.restaurant-list li:last-child{border-bottom:none;}.restaurant-list .info .name{font-weight:700;display:block;}.restaurant-list .info .location{font-size:.9em;color:var(--secondary-text);}.restaurant-list .actions{display:flex;gap:10px;align-items:center;}.actions a,.actions button{padding:6px 12px;border-radius:50px;border:none;font-size:.9em;font-weight:700;text-decoration:none;cursor:pointer;transition:background-color .2s;}.btn-edit{background-color:var(--input-bg);color:var(--dark-text);}.btn-delete{background-color:var(--primary-yellow);color:var(--dark-text);font-family:'Nunito',sans-serif;}
+    </style>
+</head>
+<body>
+    
+    <div class="hero-section">
+        <h1 class="hero-title">Foodie Finder</h1>
+        <div class="hero-images">
+            <img src="{{ url_for('static', filename='images/raccoon.png') }}" alt="思考中的浣熊" class="raccoon-img">
+            <img src="{{ url_for('static', filename='images/sandwich.png') }}" alt="三明治" class="food-icon icon-sandwich">
+            <img src="{{ url_for('static', filename='images/fish.png') }}" alt="魚" class="food-icon icon-fish">
+            <img src="{{ url_for('static', filename='images/apple.png') }}" alt="蘋果" class="food-icon icon-apple">
+            <img src="{{ url_for('static', filename='images/banana.png') }}" alt="香蕉" class="food-icon icon-banana">
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>今天吃什麼？</h2>
+        <form action="/search" method="post"><div class="custom-select-wrapper" data-name="search_city"><input type="hidden" name="city"><div class="custom-select-trigger"><span class="selected-value">-- 請選擇縣市 --</span><div class="arrow"></div></div><div class="custom-select-panel"></div></div><div class="custom-select-wrapper" data-name="search_district"><input type="hidden" name="district"><div class="custom-select-trigger"><span class="selected-value">-- (選填) 地區 --</span><div class="arrow"></div></div><div class="custom-select-panel"></div></div><div class="custom-select-wrapper" data-name="search_station"><input type="hidden" name="station"><div class="custom-select-trigger"><span class="selected-value">-- (選填) 捷運站 --</span><div class="arrow"></div></div><div class="custom-select-panel"></div></div><div class="form-row"><button type="submit" name="action" value="檢視所有" class="button button-secondary">檢視店家</button><button type="submit" name="action" value="隨機推薦" class="button button-primary">隨機推薦</button></div></form>
+    </div>
+    <div class="card results">
+        <h2>搜尋結果</h2>
+        {% if recommendation %}<div class="recommendation-result"><h3>為您推薦：</h3><p>{{ recommendation.name }}</p><small>({{ recommendation.city }} - {{ recommendation.district }} - {{ recommendation.station }})</small></div>{% elif search_results %}<h3>符合條件的店家列表：</h3><ul>{% for r in search_results %}<li>{{ r.name }} <small>({{ r.district }} - {{ r.station }})</small></li>{% else %}<li>找不到符合條件的店家。</li>{% endfor %}</ul>{% else %}<p style="text-align: center; color: #777;">請選擇條件後，點擊按鈕開始搜尋。</p>{% endif %}
+    </div>
+    <div class="card">
+        <h2>目前店家列表</h2>
+        <form action="/" method="get"><div class="custom-select-wrapper" data-name="filter_city"><input type="hidden" name="filter_city" value="{{ filter_values.filter_city }}"><div class="custom-select-trigger"><span class="selected-value">-- 篩選縣市 --</span><div class="arrow"></div></div><div class="custom-select-panel"></div></div><div class="custom-select-wrapper" data-name="filter_district"><input type="hidden" name="filter_district" value="{{ filter_values.filter_district }}"><div class="custom-select-trigger"><span class="selected-value">-- 篩選地區 --</span><div class="arrow"></div></div><div class="custom-select-panel"></div></div><div class="form-row"><a href="/" class="button button-secondary">清除篩選</a><button type="submit" class="button button-primary">進行篩選</button></div></form>
+        <hr style="margin: 25px 0; border: none; border-top: 1px solid var(--input-bg);">
+        <ul class="restaurant-list">
+            {% for restaurant in restaurants %}
+                <li>
+                    <div class="info"><span class="name">{{ restaurant.name }}</span><span class="location">{{ restaurant.city }} - {{ restaurant.district }}</span></div>
+                    <div class="actions">
+                        <a href="{{ url_for('edit', restaurant_id=restaurant.id) }}" class="btn-edit">編輯</a>
+                        <form action="{{ url_for('delete', restaurant_id=restaurant.id) }}" method="post" onsubmit="return confirm('您確定要刪除「{{ restaurant.name }}」嗎？');" style="margin:0;"><button type="submit" class="btn-delete">刪除</button></form>
+                    </div>
+                </li>
+            {% else %}
+                <li>找不到符合篩選條件的店家，或目前沒有店家資料。</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="card">
+        <h2>新增美食店家</h2>
+        <form action="/add" method="post"><div class="custom-select-wrapper" data-name="add_city"><input type="hidden" name="city" required><div class="custom-select-trigger"><span class="selected-value">-- 請選擇縣市 --</span><div class="arrow"></div></div><div class="custom-select-panel"></div></div><div class="custom-select-wrapper" data-name="add_district"><input type="hidden" name="district" required><div class="custom-select-trigger"><span class="selected-value">-- 請選擇地區 --</span><div class="arrow"></div></div><div class="custom-select-panel"></div></div><div class="custom-select-wrapper" data-name="add_station"><input type="hidden" name="station"><div class="custom-select-trigger"><span class="selected-value">-- (選填) 捷運站 --</span><div class="arrow"></div></div><div class="custom-select-panel"></div></div><input type="text" name="name" placeholder="店名" required><button type="submit" class="button button-primary">新增店家</button></form>
+    </div>
+
+    <script>
+        // JavaScript 內容與上一版完全相同 (已修正語法錯誤)
+        document.addEventListener('DOMContentLoaded', function() {
+            const locationData = {{ location_data | tojson | safe }};
+            const filterValues = {{ filter_values | tojson | safe }};
+            const sortedCities = {{ location_data.keys() | list | tojson | safe }};
+
+            document.querySelectorAll('.custom-select-wrapper').forEach(wrapper => {
+                const trigger = wrapper.querySelector('.custom-select-trigger');
+                const panel = wrapper.querySelector('.custom-select-panel');
+                const hiddenInput = wrapper.querySelector('input[type="hidden"]');
+                const selectedValueSpan = wrapper.querySelector('.selected-value');
+                trigger.addEventListener('click', () => {
+                    document.querySelectorAll('.custom-select-wrapper').forEach(otherWrapper => {
+                        if (otherWrapper !== wrapper) { otherWrapper.classList.remove('open'); }
+                    });
+                    wrapper.classList.toggle('open');
+                });
+                panel.addEventListener('click', e => {
+                    if (e.target.classList.contains('custom-select-option')) {
+                        const value = e.target.dataset.value;
+                        selectedValueSpan.textContent = value;
+                        hiddenInput.value = value;
+                        panel.querySelector('.selected')?.classList.remove('selected');
+                        e.target.classList.add('selected');
+                        wrapper.classList.remove('open');
+                        wrapper.dispatchEvent(new CustomEvent('optionSelected', { detail: { value: value } }));
+                    }
+                });
+            });
+
+            function populate(options, wrapper) { const panel = wrapper?.querySelector('.custom-select-panel'); if (!panel) return; panel.innerHTML = ''; options.forEach(optionValue => { const optionDiv = document.createElement('div'); optionDiv.className = 'custom-select-option'; optionDiv.textContent = optionValue; optionDiv.dataset.value = optionValue; panel.appendChild(optionDiv); }); }
+            function reset(wrapper) { if (!wrapper) return; const placeholders = { 'search_district': '-- (選填) 地區 --', 'search_station': '-- (選填) 捷運站 --', 'add_district': '-- 請選擇地區 --', 'add_station': '-- (選填) 捷運站 --', 'filter_district': '-- 篩選地區 --', }; wrapper.querySelector('.selected-value').textContent = placeholders[wrapper.dataset.name] || '-- 請選擇 --'; wrapper.querySelector('input').value = ''; wrapper.querySelector('.custom-select-panel').innerHTML = ''; }
+            window.addEventListener('click', e => { if (!e.target.closest('.custom-select-wrapper')) { document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open')); }});
+            
+            function initializeCascadingSelect(prefix) {
+                const cityWrapper = document.querySelector(`[data-name="${prefix}_city"]`);
+                const districtWrapper = document.querySelector(`[data-name="${prefix}_district"]`);
+                const stationWrapper = document.querySelector(`[data-name="${prefix}_station"]`);
+                if (!cityWrapper) return;
+                populate(sortedCities, cityWrapper);
+                cityWrapper.addEventListener('optionSelected', e => {
+                    reset(districtWrapper);
+                    if (stationWrapper) reset(stationWrapper);
+                    const districts = locationData[e.detail.value] ? Object.keys(locationData[e.detail.value]) : [];
+                    populate(districts, districtWrapper);
+                });
+                if (districtWrapper) {
+                    districtWrapper.addEventListener('optionSelected', e => {
+                        if (stationWrapper) {
+                            reset(stationWrapper);
+                            const selectedCity = cityWrapper.querySelector('input').value;
+                            const stations = (locationData[selectedCity] && locationData[selectedCity][e.detail.value]) ? locationData[selectedCity][e.detail.value] : [];
+                            populate(stations, stationWrapper);
+                        }
+                    });
+                }
+            }
+
+            initializeCascadingSelect('search');
+            initializeCascadingSelect('add');
+            initializeCascadingSelect('filter');
+
+            const selectedCity = filterValues.filter_city;
+            const selectedDistrict = filterValues.filter_district;
+            if (selectedCity) {
+                document.querySelector('[data-name="filter_city"] .selected-value').textContent = selectedCity;
+                const filterDistrictWrapper = document.querySelector('[data-name="filter_district"]');
+                populate(locationData[selectedCity] ? Object.keys(locationData[selectedCity]) : [], filterDistrictWrapper);
+                if (selectedDistrict) {
+                    filterDistrictWrapper.querySelector('.selected-value').textContent = selectedDistrict;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

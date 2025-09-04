@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>編輯店家</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-yellow: #FFC727;
+            --dark-text: #1D1D1D;
+            --bg-color: #F7F7F7;
+            --input-bg: #F2F2F2;
+            --white: #ffffff;
+            --shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--bg-color);
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: var(--white);
+            border-radius: 20px;
+            padding: 25px 30px;
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            color: var(--dark-text);
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.8em;
+            margin-top: 0;
+            margin-bottom: 30px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: 700;
+            margin-bottom: -5px;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: 12px;
+            border: none;
+            background-color: var(--input-bg);
+            font-size: 1em;
+            font-family: 'Nunito', sans-serif;
+            transition: box-shadow 0.2s;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px var(--primary-yellow);
+        }
+
+        .form-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .button {
+            cursor: pointer; padding: 16px; border-radius: 50px;
+            border: none; font-size: 1em; font-weight: 700;
+            font-family: 'Nunito', sans-serif; transition: background-color 0.2s, transform 0.2s;
+            width: 100%; box-sizing: border-box; text-align: center; text-decoration: none;
+        }
+        .button:hover { transform: scale(1.03); }
+        .button-primary { background-color: var(--primary-yellow); color: var(--dark-text); box-shadow: 0 4px 12px rgba(255, 199, 39, 0.4); }
+        .button-primary:hover { background-color: #f0b90c; }
+        .button-secondary { background-color: var(--input-bg); color: var(--dark-text); }
+        .button-secondary:hover { background-color: #e0e0e0; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>編輯店家資訊</h1>
+        <form action="{{ url_for('edit', restaurant_id=restaurant.id) }}" method="post">
+            <label for="city">縣市</label>
+            <input type="text" id="city" name="city" value="{{ restaurant.city }}" required>
+            
+            <label for="district">地區</label>
+            <input type="text" id="district" name="district" value="{{ restaurant.district }}" required>
+
+            <label for="station">捷運站</label>
+            <input type="text" id="station" name="station" value="{{ restaurant.station }}">
+
+            <label for="name">店名</label>
+            <input type="text" id="name" name="name" value="{{ restaurant.name }}" required>
+
+            <div class="form-actions">
+                <a href="{{ url_for('index') }}" class="button button-secondary">取消</a>
+                <button type="submit" class="button button-primary">儲存變更</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
