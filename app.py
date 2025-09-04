@@ -11,9 +11,6 @@ app = Flask(__name__)
 DATA_DIR = '/var/data'
 DATABASE = os.path.join(DATA_DIR, 'restaurants.db')
 
-# 確保資料夾存在
-os.makedirs(DATA_DIR, exist_ok=True)
-
 # --- 資料區塊 ---
 # (這部分資料只會在第一次建立資料庫時使用)
 LOCATION_DATA = {
