@@ -3,11 +3,15 @@
 {% block title %}我的美食地圖 - Foodie Finder{% endblock %}
 
 {% block content %}
+
 <nav>
     <div class="user-actions">
         {% if g.user %}
             <span>您好, {{ g.user.username }}</span>
             <a href="{{ url_for('logout') }}">登出</a>
+        {% else %}
+            <a href="{{ url_for('register') }}">註冊</a>
+            <a href="{{ url_for('login') }}">登入</a>
         {% endif %}
     </div>
 </nav>
@@ -33,7 +37,7 @@
 </div>
 <div class="card">
     <h2>目前店家列表</h2>
-    <form action="/" method="get"><div class="custom-select-wrapper" data-name="filter_city"><input type="hidden" name="filter_city" value="{{ filter_values.filter_city }}"><div class="custom-select-trigger"><span class="selected-value">-- 篩選縣市 --</span><div class="arrow"></div></div><div class="custom-select-panel"></div></div><div class="custom-select-wrapper" data-name="filter_district"><input type="hidden" name="filter_district" value="{{ filter_values.filter_district }}"><div class="custom-select-trigger"><span class="selected-value">-- 篩選地區 --</span><div class="arrow"></div></div><div class="custom-select-panel"></div></div><div class="form-row"><a href="/" class="button button-secondary">清除篩選</a><button type="submit" class="button button-primary">進行篩選</button></div></form>
+    <form action="/" method="get"><div class="custom-select-wrapper" data-name="filter_city"><input type="hidden" name="filter_city" value="{{ filter_values.filter_city }}"><div class="custom-select-trigger"><span class="selected-value">-- 篩選縣市 --</span><div class="arrow"></div></div><div class="custom-select-panel"></div></div><div class="custom-select-wrapper" data-name="filter_district"><input type="hidden" name="filter_district" value="{{ filter_values.filter_district }}"><div class="custom-select-trigger"><span class="selected-value">-- 篩選地區 --</span><div class="arrow"></div></div><div class="custom-select-panel"></div></div><div class="form-actions-row"><a href="/" class="button button-secondary">清除篩選</a><button type="submit" class="button button-primary">進行篩選</button></div></form>
     <hr style="margin: 25px 0; border: none; border-top: 1px solid var(--input-bg);">
     <ul class="restaurant-list">
         {% for restaurant in restaurants %}
@@ -55,7 +59,7 @@
 </div>
 
 <script>
-    // JavaScript 內容與上一版完全相同 (已修正語法錯誤)
+    // JavaScript 內容與上一版完全相同
     document.addEventListener('DOMContentLoaded', function() {
         const locationData = {{ location_data | tojson | safe }};
         const filterValues = {{ filter_values | tojson | safe }};
