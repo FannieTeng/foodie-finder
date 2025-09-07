@@ -3,12 +3,17 @@
 {% block title %}登入 - Foodie Finder{% endblock %}
 
 {% block content %}
-<div class="card">
-    <h1 style="text-align: center; font-size: 2em; margin-bottom: 30px;">歡迎回來！</h1>
+<h1 class="main-title">Foodie Finder</h1>
+<div class="card auth-card">
+    <h2>歡迎回來！</h2>
     <form method="post">
-        <input type="text" name="username" placeholder="使用者名稱" required style="padding: 16px 20px; border-radius: 12px; border: none; background-color: #F2F2F2; font-size: 1em;">
-        <input type="password" name="password" placeholder="密碼" required style="padding: 16px 20px; border-radius: 12px; border: none; background-color: #F2F2F2; font-size: 1em;">
-        <button type="submit" class="button button-primary">登入</button>
+        <input type="text" name="username" placeholder="使用者名稱" required>
+        <input type="password" name="password" placeholder="密碼" required>
+        <div class="form-actions-row">
+            <a href="{{ url_for('register') }}" class="button button-secondary">註冊</a>
+            <button type="submit" class="button button-primary">登入</button>
+        </div>
     </form>
+    <img src="{{ url_for('static', filename='images/raccoon_eating.png') }}" alt="吃美食的浣熊" class="auth-image">
 </div>
 {% endblock %}

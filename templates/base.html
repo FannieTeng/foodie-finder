@@ -9,42 +9,48 @@
     <style>
         :root{--primary-yellow:#FFC727;--dark-text:#1D1D1D;--secondary-text:#8A8A8E;--bg-color:#F7F7F7;--input-bg:#F2F2F2;--white:#ffffff;--shadow:0 8px 24px rgba(0,0,0,0.05);}
         body{font-family:'Nunito',sans-serif;max-width:700px;margin:0 auto;padding:20px;background-color:var(--bg-color);color:var(--dark-text);}
-        .card{background-color:var(--white);border-radius:20px;padding:25px 30px;margin-bottom:25px;box-shadow:var(--shadow);border:none;}
-        a { color: var(--primary-yellow); text-decoration: none; }
-        .button{cursor:pointer;padding:16px;border-radius:50px;border:none;font-size:1em;font-weight:700;font-family:'Nunito',sans-serif;transition:background-color .2s,transform .2s;width:100%;box-sizing:border-box;text-align:center;text-decoration:none;box-shadow:0 4px 12px rgba(255,199,39,.4);}.button:hover{transform:scale(1.03);}.button-primary{background-color:var(--primary-yellow);color:var(--dark-text);}.button-primary:hover{background-color:#f0b90c;}
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background-color: var(--white); border-radius: 50px; box-shadow: var(--shadow); margin-bottom: 30px; }
-        nav a.logo { font-weight: 800; font-size: 1.5em; color: var(--dark-text); }
-        nav .user-actions a { margin-left: 15px; font-weight: 700; }
+        a { color: var(--dark-text); text-decoration: none; font-weight: 700; }
+        .main-title { font-size: 3em; color: var(--dark-text); font-weight: 800; margin: 40px 0; text-align: center; }
+        .card{background-color:var(--white);border-radius:20px;padding:25px 30px;margin-bottom:25px;box-shadow:var(--shadow);border:none;z-index:2;position:relative;}
+        h2{text-align:left;color:var(--dark-text);font-weight:800;margin-top:0;margin-bottom:25px;border-bottom:none;padding-bottom:0;font-size:1.5em;}
+        form{display:flex;flex-direction:column;gap:15px;}
+        nav { display: flex; justify-content: flex-end; align-items: center; padding: 10px 0; margin-bottom: 20px; }
+        nav .user-actions { display: flex; align-items: center; gap: 20px; padding: 8px 25px; background-color: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border-radius: 50px; box-shadow: var(--shadow); border: 1px solid #eee; }
+        nav .user-actions a { font-weight: 700; padding: 8px 15px; border-radius: 50px; transition: background-color 0.2s; }
+        nav .user-actions a:hover { background-color: var(--input-bg); }
+        nav .user-actions span { font-weight: 700; color: var(--secondary-text); }
+        .hero-section { text-align: center; padding: 20px 20px 40px 20px; }
+        .hero-title { font-size: 3.5em; color: var(--dark-text); font-weight: 800; margin: 0 0 20px 0; }
+        .hero-images { position: relative; display: inline-block; margin-top: 20px; }
+        .raccoon-img { width: 150px; position: relative; z-index: 2; }
+        .food-icon { position: absolute; z-index: 1; animation: float 4s ease-in-out infinite; }
+        .icon-sandwich { top: 50%; left: -85%; width: 65px; animation-delay: 0.5s; }
+        .icon-fish { top: -20%; left: -35%; width: 50px; transform: rotate(-20deg); }
+        .icon-apple { top: -25%; right: -40%; width: 45px; animation-delay: 1s; }
+        .icon-banana { top: 60%; right: -70%; width: 60px; transform: rotate(20deg); animation-delay: 0.8s; }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
+        .custom-select-wrapper{position:relative;width:100%;font-size:1em;}.custom-select-trigger,input[type="text"],input[type="password"]{width:100%;padding:16px 20px;border-radius:12px;border:none;background-color:var(--input-bg);font-size:1em;font-family:'Nunito',sans-serif;transition:box-shadow .2s;box-sizing:border-box;}.custom-select-trigger{padding-right:45px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;}
+        .custom-select-wrapper.open .custom-select-trigger,input[type="text"]:focus,input[type="password"]:focus{outline:none;box-shadow:0 0 0 3px var(--primary-yellow);}.custom-select-trigger .arrow{width:20px;height:20px;background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238A8A8E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");background-repeat:no-repeat;background-position:center;transition:transform .2s;position:absolute;right:15px;top:50%;transform:translateY(-50%);}.custom-select-wrapper.open .custom-select-trigger .arrow{transform:translateY(-50%) rotate(180deg);}.custom-select-panel{position:absolute;top:calc(100% + 5px);left:0;right:0;background-color:var(--white);border-radius:12px;box-shadow:var(--shadow);max-height:200px;overflow-y:auto;z-index:10;opacity:0;visibility:hidden;transform:translateY(-10px);transition:opacity .2s,transform .2s,visibility .2s;padding:5px;}.custom-select-wrapper.open .custom-select-panel{opacity:1;visibility:visible;transform:translateY(0);}.custom-select-option{padding:12px 15px;cursor:pointer;transition:background-color .2s;border-radius:8px;}.custom-select-option:hover,.custom-select-option.selected{background-color:var(--input-bg);}
+        .button{cursor:pointer;padding:16px;border-radius:50px;border:2px solid transparent;font-size:1em;font-weight:700;font-family:'Nunito',sans-serif;transition:all .2s;width:100%;box-sizing:border-box;text-align:center;text-decoration:none;}.button:hover{transform:scale(1.03);}.button-primary{background-color:var(--primary-yellow);color:var(--dark-text);box-shadow:0 4px 12px rgba(255,199,39,.4);}.button-primary:hover{background-color:#f0b90c;}.button-secondary{background-color:var(--input-bg);color:var(--dark-text);box-shadow:none;}.button-secondary:hover{background-color:#e0e0e0;}.button-light{background-color:#f0f0f0;color:var(--dark-text);}.button-light:hover{background-color:#e0e0e0;}.form-row,.form-actions-row{display:grid;grid-template-columns:1fr 1fr;gap:15px;}
         .flash-message { padding: 15px; margin-bottom: 20px; border-radius: 12px; text-align: center; font-weight: 700; }
         .flash-success { background-color: #e8f5e9; color: #388e3c; }
         .flash-error { background-color: #ffcdd2; color: #c62828; }
+        .auth-card { text-align: center; }.auth-card h2 { font-size: 1.8em; font-weight: 800; margin-bottom: 30px; }.auth-card form { display: flex; flex-direction: column; gap: 20px; }.auth-card .auth-image { margin-top: 30px; max-width: 250px; }
+        .results h2{border-color:#ffe8e8;}.recommendation-result p{text-align:center;font-size:2em;color:var(--dark-text);font-weight:800;margin:0;}.recommendation-result small{display:block;text-align:center;color:var(--secondary-text);margin-top:5px;}
+        .restaurant-list{list-style-type:none;padding:0;}.restaurant-list li{display:flex;justify-content:space-between;align-items:center;padding:15px 5px;border-bottom:1px solid var(--input-bg);}.restaurant-list li:last-child{border-bottom:none;}.restaurant-list .info .name{font-weight:700;display:block;}.restaurant-list .info .location{font-size:.9em;color:var(--secondary-text);}.restaurant-list .actions{display:flex;gap:10px;align-items:center;}.actions a,.actions button{padding:6px 12px;border-radius:50px;border:none;font-size:.9em;font-weight:700;text-decoration:none;cursor:pointer;transition:background-color .2s;}.btn-edit{background-color:var(--input-bg);color:var(--dark-text);}.btn-delete{background-color:var(--primary-yellow);color:var(--dark-text);font-family:'Nunito',sans-serif;}
     </style>
 </head>
 <body>
-    <nav>
-        <a href="{{ url_for('index') }}" class="logo">Foodie Finder</a>
-        <div class="user-actions">
-            {% if g.user %}
-                <span>您好, {{ g.user.username }}</span>
-                <a href="{{ url_for('logout') }}">登出</a>
-            {% else %}
-                <a href="{{ url_for('register') }}">註冊</a>
-                <a href="{{ url_for('login') }}">登入</a>
-            {% endif %}
-        </div>
-    </nav>
-
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="flash-message flash-{{ category }}">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-
     <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
         {% block content %}{% endblock %}
     </main>
-
 </body>
 </html>
