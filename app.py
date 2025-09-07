@@ -46,8 +46,29 @@ def load_logged_in_user():
 
 @app.route('/')
 def index():
-    # 在下個階段，我們會在這裡加入顯示個人餐廳列表的邏輯
-    return render_template('index.html')
+    # 如果使用者已登入，就只選取他自己的餐廳
+    if g.user:
+        restaurants_query = db.session.execute(
+            db.select(Restaurant).where(Restaurant.user_id == g.user.id).order_by(Restaurant.id)
+        ).scalars().all()
+    else:
+        # 如果未登入，餐廳列表就為空
+        restaurants_query = []
+
+    restaurants_list = [r.to_dict() for r in restaurants_query]
+
+    # 篩選邏輯
+    filter_city = request.args.get('filter_city')
+    if filter_city:
+        restaurants_list = [r for r in restaurants_list if r['city'] == filter_city]
+
+    # ...您可以加入地區等的篩選...
+
+    # 修正點：將所有需要的資料都傳遞給前端
+    return render_template('index.html', 
+                           location_data=LOCATION_DATA, 
+                           restaurants=restaurants_list,
+                           filter_values=request.args)
 
 # --- 使用者系統路由 ---
 
