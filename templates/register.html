@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}註冊 - Foodie Finder{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1 style="text-align: center; font-size: 2em; margin-bottom: 30px;">建立您的美食地圖</h1>
+    <form method="post">
+        <input type="text" name="username" placeholder="使用者名稱" required style="padding: 16px 20px; border-radius: 12px; border: none; background-color: #F2F2F2; font-size: 1em;">
+        <input type="password" name="password" placeholder="密碼" required style="padding: 16px 20px; border-radius: 12px; border: none; background-color: #F2F2F2; font-size: 1em;">
+        <button type="submit" class="button button-primary">註冊</button>
+    </form>
+</div>
+{% endblock %}
