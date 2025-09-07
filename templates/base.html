@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Foodie Finder{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root{--primary-yellow:#FFC727;--dark-text:#1D1D1D;--secondary-text:#8A8A8E;--bg-color:#F7F7F7;--input-bg:#F2F2F2;--white:#ffffff;--shadow:0 8px 24px rgba(0,0,0,0.05);}
+        body{font-family:'Nunito',sans-serif;max-width:700px;margin:0 auto;padding:20px;background-color:var(--bg-color);color:var(--dark-text);}
+        .card{background-color:var(--white);border-radius:20px;padding:25px 30px;margin-bottom:25px;box-shadow:var(--shadow);border:none;}
+        a { color: var(--primary-yellow); text-decoration: none; }
+        .button{cursor:pointer;padding:16px;border-radius:50px;border:none;font-size:1em;font-weight:700;font-family:'Nunito',sans-serif;transition:background-color .2s,transform .2s;width:100%;box-sizing:border-box;text-align:center;text-decoration:none;box-shadow:0 4px 12px rgba(255,199,39,.4);}.button:hover{transform:scale(1.03);}.button-primary{background-color:var(--primary-yellow);color:var(--dark-text);}.button-primary:hover{background-color:#f0b90c;}
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background-color: var(--white); border-radius: 50px; box-shadow: var(--shadow); margin-bottom: 30px; }
+        nav a.logo { font-weight: 800; font-size: 1.5em; color: var(--dark-text); }
+        nav .user-actions a { margin-left: 15px; font-weight: 700; }
+        .flash-message { padding: 15px; margin-bottom: 20px; border-radius: 12px; text-align: center; font-weight: 700; }
+        .flash-success { background-color: #e8f5e9; color: #388e3c; }
+        .flash-error { background-color: #ffcdd2; color: #c62828; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('index') }}" class="logo">Foodie Finder</a>
+        <div class="user-actions">
+            {% if g.user %}
+                <span>您好, {{ g.user.username }}</span>
+                <a href="{{ url_for('logout') }}">登出</a>
+            {% else %}
+                <a href="{{ url_for('register') }}">註冊</a>
+                <a href="{{ url_for('login') }}">登入</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+</body>
+</html>
