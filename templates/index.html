@@ -3,15 +3,11 @@
 {% block title %}我的美食地圖 - Foodie Finder{% endblock %}
 
 {% block content %}
-
 <nav>
     <div class="user-actions">
         {% if g.user %}
             <span>您好, {{ g.user.username }}</span>
             <a href="{{ url_for('logout') }}">登出</a>
-        {% else %}
-            <a href="{{ url_for('register') }}">註冊</a>
-            <a href="{{ url_for('login') }}">登入</a>
         {% endif %}
     </div>
 </nav>
@@ -37,7 +33,7 @@
 </div>
 <div class="card">
     <h2>目前店家列表</h2>
-    <form action="/" method="get"><div class="custom-select-wrapper" data-name="filter_city"><input type="hidden" name="filter_city" value="{{ filter_values.filter_city }}"><div class="custom-select-trigger"><span class="selected-value">-- 篩選縣市 --</span><div class="arrow"></div></div><div class="custom-select-panel"></div></div><div class="custom-select-wrapper" data-name="filter_district"><input type="hidden" name="filter_district" value="{{ filter_values.filter_district }}"><div class="custom-select-trigger"><span class="selected-value">-- 篩選地區 --</span><div class="arrow"></div></div><div class="custom-select-panel"></div></div><div class="form-actions-row"><a href="/" class="button button-secondary">清除篩選</a><button type="submit" class="button button-primary">進行篩選</button></div></form>
+    <form action="/" method="get"><div class="custom-select-wrapper" data-name="filter_city"><input type="hidden" name="filter_city" value="{{ filter_values.filter_city }}"><div class="custom-select-trigger"><span class="selected-value">-- 篩選縣市 --</span><div class="arrow"></div></div><div class="custom-select-panel"></div></div><div class="custom-select-wrapper" data-name="filter_district"><input type="hidden" name="filter_district" value="{{ filter_values.filter_district }}"><div class="custom-select-trigger"><span class="selected-value">-- 篩選地區 --</span><div class="arrow"></div></div><div class="custom-select-panel"></div></div><div class="form-row"><a href="/" class="button button-secondary">清除篩選</a><button type="submit" class="button button-primary">進行篩選</button></div></form>
     <hr style="margin: 25px 0; border: none; border-top: 1px solid var(--input-bg);">
     <ul class="restaurant-list">
         {% for restaurant in restaurants %}
@@ -59,12 +55,12 @@
 </div>
 
 <script>
-    // JavaScript 內容與上一版完全相同
+    // JavaScript 內容與我們之前修正好的版本完全相同
     document.addEventListener('DOMContentLoaded', function() {
         const locationData = {{ location_data | tojson | safe }};
         const filterValues = {{ filter_values | tojson | safe }};
         const sortedCities = {{ location_data.keys() | list | tojson | safe }};
-        function initializeCascadingSelect(prefix) { /* ... 內容不變 ... */ const cityWrapper = document.querySelector(`[data-name="${prefix}_city"]`); const districtWrapper = document.querySelector(`[data-name="${prefix}_district"]`); const stationWrapper = document.querySelector(`[data-name="${prefix}_station"]`); if (!cityWrapper) return; populate(sortedCities, cityWrapper); cityWrapper.addEventListener('optionSelected', e => { reset(districtWrapper); if (stationWrapper) reset(stationWrapper); const districts = locationData[e.detail.value] ? Object.keys(locationData[e.detail.value]) : []; populate(districts, districtWrapper); }); if (districtWrapper) { districtWrapper.addEventListener('optionSelected', e => { if (stationWrapper) { reset(stationWrapper); const selectedCity = cityWrapper.querySelector('input').value; const stations = (locationData[selectedCity] && locationData[selectedCity][e.detail.value]) ? locationData[selectedCity][e.detail.value] : []; populate(stations, stationWrapper); } }); } }
+        function initializeCascadingSelect(prefix) { const cityWrapper = document.querySelector(`[data-name="${prefix}_city"]`); const districtWrapper = document.querySelector(`[data-name="${prefix}_district"]`); const stationWrapper = document.querySelector(`[data-name="${prefix}_station"]`); if (!cityWrapper) return; populate(sortedCities, cityWrapper); cityWrapper.addEventListener('optionSelected', e => { reset(districtWrapper); if (stationWrapper) reset(stationWrapper); const districts = locationData[e.detail.value] ? Object.keys(locationData[e.detail.value]) : []; populate(districts, districtWrapper); }); if (districtWrapper) { districtWrapper.addEventListener('optionSelected', e => { if (stationWrapper) { reset(stationWrapper); const selectedCity = cityWrapper.querySelector('input').value; const stations = (locationData[selectedCity] && locationData[selectedCity][e.detail.value]) ? locationData[selectedCity][e.detail.value] : []; populate(stations, stationWrapper); } }); } }
         document.querySelectorAll('.custom-select-wrapper').forEach(wrapper => { const trigger = wrapper.querySelector('.custom-select-trigger'); const panel = wrapper.querySelector('.custom-select-panel'); const hiddenInput = wrapper.querySelector('input[type="hidden"]'); const selectedValueSpan = wrapper.querySelector('.selected-value'); trigger.addEventListener('click', () => { document.querySelectorAll('.custom-select-wrapper').forEach(otherWrapper => { if (otherWrapper !== wrapper) { otherWrapper.classList.remove('open'); } }); wrapper.classList.toggle('open'); }); panel.addEventListener('click', e => { if (e.target.classList.contains('custom-select-option')) { const value = e.target.dataset.value; selectedValueSpan.textContent = value; hiddenInput.value = value; panel.querySelector('.selected')?.classList.remove('selected'); e.target.classList.add('selected'); wrapper.classList.remove('open'); wrapper.dispatchEvent(new CustomEvent('optionSelected', { detail: { value: value } })); } }); });
         function populate(options, wrapper) { const panel = wrapper?.querySelector('.custom-select-panel'); if (!panel) return; panel.innerHTML = ''; options.forEach(optionValue => { const optionDiv = document.createElement('div'); optionDiv.className = 'custom-select-option'; optionDiv.textContent = optionValue; optionDiv.dataset.value = optionValue; panel.appendChild(optionDiv); }); }
         function reset(wrapper) { if (!wrapper) return; const placeholders = { 'search_district': '-- (選填) 地區 --', 'search_station': '-- (選填) 捷運站 --', 'add_district': '-- 請選擇地區 --', 'add_station': '-- (選填) 捷運站 --', 'filter_district': '-- 篩選地區 --', }; wrapper.querySelector('.selected-value').textContent = placeholders[wrapper.dataset.name] || '-- 請選擇 --'; wrapper.querySelector('input').value = ''; wrapper.querySelector('.custom-select-panel').innerHTML = ''; }
